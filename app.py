@@ -25,7 +25,6 @@ def create_app():
 
 
 def setup_logging(app):
-    """确保 Flask 所有日志写入 app.log"""
     log_formatter = logging.Formatter(
         "[%(asctime)s] [%(levelname)s] %(message)s",
         "%Y-%m-%d %H:%M:%S"
@@ -43,5 +42,4 @@ def setup_logging(app):
 
 if __name__ == '__main__':
     app = create_app()
-    # ✅ 确保 Flask 日志也输出到文件
     app.run(host='0.0.0.0', port=8080, debug=True)

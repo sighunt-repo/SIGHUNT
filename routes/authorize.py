@@ -15,8 +15,8 @@ def authorize():
         user_agent = request.headers.get("User-Agent", "unknown")
 
         current_app.logger.info(
-            f"[authorize] JS执行={js_executed} | 客户端IP={client_ip} | "
-            f"北京时间={beijing_time} | UA={user_agent}"
+            f"[authorize] JS executed={js_executed} | Client IP={client_ip} | "
+            f"Beijing Time={beijing_time} | UA={user_agent}"
         )
 
         if js_executed:
