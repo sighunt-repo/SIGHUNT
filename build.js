@@ -7,15 +7,11 @@ const cheerio = require('cheerio');
 const { minify } = require('html-minifier-terser');
 
 
-// ====== 配置区 ======
-
 const SRC_DIR = path.join(__dirname, 'src');
 const DIST_DIR = path.join(__dirname, 'docs');
 
-// 只混淆这个目录下的 js（你自己的代码）
 const OBFUSCATE_JS_DIR = path.join(SRC_DIR, 'js');
 
-// 不混淆这些关键字命中的文件（防止误伤库）
 const EXCLUDE_KEYWORDS = [
   'jquery',
   'bootstrap',
@@ -24,22 +20,19 @@ const EXCLUDE_KEYWORDS = [
   'min.js'
 ];
 
-// 混淆参数（先用温和版，保证不炸）
 const OBFUSCATOR_OPTIONS = {
   compact: true,
-  controlFlowFlattening: false,   // 先关，稳定第一
+  controlFlowFlattening: false,   
   stringArray: true,
   stringArrayThreshold: 0.75,
 
-  // ⚠️ 所有“自毁 / 反调试”统统关闭
   debugProtection: false,
   selfDefending: false,
   disableConsoleOutput: false,
 
-  renameGlobals: false            // 非常重要：避免全局函数名被改
+  renameGlobals: false            
 };
 
-// ====== 工具函数 ======
 
 function getBuildTag() {
   const now = new Date();
@@ -54,14 +47,12 @@ function ensureDir(dir) {
 }
 
 function shouldObfuscateJs(filePath) {
-  // 只处理 /src/js 目录下的文件
   if (!filePath.startsWith(OBFUSCATE_JS_DIR)) return false;
 
   const name = filePath.toLowerCase();
   return !EXCLUDE_KEYWORDS.some(k => name.includes(k));
 }
 
-// ====== 处理 JS 文件 ======
 
 function processJsFile(srcPath, distPath) {
   const code = fs.readFileSync(srcPath, 'utf8');
@@ -77,27 +68,25 @@ function processJsFile(srcPath, distPath) {
   }
 }
 
-// ====== 处理 HTML 文件（不动内联脚本，只改引用路径） ======
-
 async function processHtmlFile(srcPath, distPath) {
   const html = fs.readFileSync(srcPath, 'utf8');
   const $ = cheerio.load(html, { decodeEntities: false });
 
   const buildTag = getBuildTag();
 
-  // 插入构件标记到 <head> 最前面
+
   if ($('head').length) {
     $('head').prepend(`\n<!-- ${buildTag} -->\n`);
   }
-  // ⚠️ 不混淆内联 JS，只做结构级压缩
+
   const compressedHtml = await minify($.html(), {
-    collapseWhitespace: true,        // 压缩空白
-    removeComments: true,            // 移除 HTML 注释
+    collapseWhitespace: true,        
+    removeComments: true,            
     removeRedundantAttributes: true,
     removeEmptyAttributes: true,
-    minifyCSS: true,                 // 内联 CSS 压缩
-    minifyJS: false,                 // ⚠️ 内联 JS 不动，防止炸
-    removeAttributeQuotes: false,    // 保留引号，防止兼容问题
+    minifyCSS: true,                 
+    minifyJS: false,                 
+    removeAttributeQuotes: false,    
     keepClosingSlash: true
   });
 
@@ -106,7 +95,6 @@ async function processHtmlFile(srcPath, distPath) {
 }
 
 
-// ====== 递归处理目录 ======
 
 async function walkDir(srcDir, distDir) {
   ensureDir(distDir);
@@ -138,8 +126,6 @@ async function walkDir(srcDir, distDir) {
   console.log('=== Build Finished ===');
 })();
 
-
-// ====== 主入口 ======
 
 console.log('=== Build Start ===');
 ensureDir(DIST_DIR);

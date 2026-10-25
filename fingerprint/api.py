@@ -17,18 +17,16 @@ def collect_fingerprint():
     current_app.logger.info(f"[LOGIN DEBUG] Raw POST data = {data}")
     url = data.get('url', '')
 
-    # ✅ 真实 IP 获取（优先 X-Forwarded-For）
     ip = request.headers.get('X-Forwarded-For')
     if ip and ',' in ip:
         ip = ip.split(',')[0].strip()
     if not ip:
         ip = request.headers.get('X-Real-IP', request.remote_addr)
 
-    # ✅ Cookie 获取（根据你设置的名字）
     cookie = request.cookies.get('user_cookie', '')
 
     if not username:
-        return jsonify({'success': False, 'message': '用户名缺失'}), 400
+        return jsonify({'success': False, 'message': 'username is required'}), 400
 
     record = LoginRecord(
         username=username,

@@ -14,20 +14,17 @@ def authorize():
         client_ip = request.remote_addr or "unknown"
         user_agent = request.headers.get("User-Agent", "unknown")
 
-        # ✅ 写入日志
         current_app.logger.info(
             f"[authorize] JS执行={js_executed} | 客户端IP={client_ip} | "
             f"北京时间={beijing_time} | UA={user_agent}"
         )
 
-        # ✅ 如果 JS 执行成功，返回真实页面
         if js_executed:
             return render_template("test_real.html")
-
-        # 否则返回提示
-        return jsonify({"success": False, "message": "JS未执行，拒绝访问"}), 403
+        
+        return jsonify({"success": False, "message": "Deny"}), 403
 
     except Exception as e:
-        current_app.logger.error(f"[/authorize] 处理出错: {e}", exc_info=True)
-        return jsonify({"success": False, "message": "服务器内部错误"}), 500
+        current_app.logger.error(f"[/authorize] Error: {e}", exc_info=True)
+        return jsonify({"success": False, "message": "Error"}), 500
     

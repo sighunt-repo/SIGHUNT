@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>用户注册</title>
+  <title>register</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <div class="login-container">
-    <h2>用户注册</h2>
+    <h2>register</h2>
     <div id="registerResult" class="error-msg" style="color: red;"></div>
 
     <form id="registerForm">
-      <input type="text" id="username" placeholder="用户名" required>
-      <input type="password" id="password" placeholder="密码" required>
-      <button type="submit">注册</button>
+      <input type="text" id="username" placeholder="username" required>
+      <input type="password" id="password" placeholder="password" required>
+      <button type="submit">register</button>
     </form>
 
-    <p>已有账号？<a href="login.html">点击登录</a></p>
+    <p>account already exists? <a href="login.html"> click to login</a></p>
   </div>
 
   <script>
@@ -29,7 +29,7 @@
 
       if (!username || !password) {
         resultBox.style.color = 'red';
-        resultBox.innerText = "用户名和密码不能为空";
+        resultBox.innerText = "username and password cannot be empty";
         return;
       }
 
@@ -48,18 +48,18 @@
 
         if (result.success) {
           resultBox.style.color = 'green';
-          resultBox.innerText = "注册成功，正在跳转...";
+          resultBox.innerText = "Registration successful, redirecting...";
           setTimeout(() => {
             window.location.href = 'login.html';
           }, 1000);
         } else {
           resultBox.style.color = 'red';
-          resultBox.innerText = result.message || "注册失败";
+          resultBox.innerText = result.message || "Registration failed";
         }
       } catch (error) {
-        console.error("注册请求失败:", error);
+        console.error("Registration request failed:", error);
         resultBox.style.color = 'red';
-        resultBox.innerText = "无法连接服务器";
+        resultBox.innerText = " Registration request failed, please try again later";
       }
     });
   </script>

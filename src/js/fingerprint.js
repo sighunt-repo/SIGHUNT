@@ -3,7 +3,7 @@ async function getFingerprint(username = '') {
     try {
         // const domProbe = initDOMAnomalyProbe();
         const totalStart = performance.now();
-        const timing = {};  // 用于记录每个 signal 的耗时（ms）
+        const timing = {};  
 
         let t1 = performance.now();
         const audioData = await getAudioFingerprint();
@@ -45,12 +45,10 @@ async function getFingerprint(username = '') {
         const honeypotData = window.getHoneypot ? window.getHoneypot() : null;
         const mutationData = getMutationStats();
 
-        // --- 总耗时 ---
         const totalEnd = performance.now();
         const duration = totalEnd - totalStart;
         timing.total = duration;
 
-        // ✔ 最终返回完整 fingerprint（不上传）
         return {
             audioData,
             canvasData,
@@ -70,7 +68,7 @@ async function getFingerprint(username = '') {
 
     } catch (e) {
         console.error("Fingerprint error: ", e);
-        return {}; // 返回空对象，不是 'unknown'
+        return {}; 
     }
 }
 

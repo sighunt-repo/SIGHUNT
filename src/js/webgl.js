@@ -21,18 +21,15 @@ async function getWebGLFingerprint() {
         const gl = getWebGLContext();
         if (!gl) return { supported: false };
 
-        // --- 基础信息 ---
         const basicVendor = safeGet(gl, gl.VENDOR) || "";
         const basicRenderer = safeGet(gl, gl.RENDERER) || "";
         const version = safeGet(gl, gl.VERSION) || "";
         const shadingLang = safeGet(gl, gl.SHADING_LANGUAGE_VERSION) || "";
 
-        // --- Chrome/Edge 扩展 ---
         let vendorUnmasked = "";
         let rendererUnmasked = "";
         const dbgRendererInfo = gl.getExtension("WEBGL_debug_renderer_info");
         if (dbgRendererInfo) {
-            // ⚠️ Firefox 已经 deprecated，会 fallback 到 basic
             vendorUnmasked =
                 safeGet(gl, dbgRendererInfo.UNMASKED_VENDOR_WEBGL) || basicVendor;
             rendererUnmasked =
@@ -49,7 +46,6 @@ async function getWebGLFingerprint() {
             rendererUnmasked,
         };
 
-        // --- 常用参数 ---
         const parameters = {
             aliasedLineWidthRange: safeGet(gl, gl.ALIASED_LINE_WIDTH_RANGE),
             aliasedPointSizeRange: safeGet(gl, gl.ALIASED_POINT_SIZE_RANGE),
@@ -60,10 +56,8 @@ async function getWebGLFingerprint() {
             maxTextureSize: safeGet(gl, gl.MAX_TEXTURE_SIZE),
         };
 
-        // --- 扩展列表 ---
         const extensions = gl.getSupportedExtensions() || [];
 
-        // --- 着色器精度 ---
         const shaderPrecisions = [];
         const shaderTypes = ["FRAGMENT_SHADER", "VERTEX_SHADER"];
         const precisionTypes = [
@@ -94,7 +88,6 @@ async function getWebGLFingerprint() {
                             );
                         }
                     } catch (e) {
-                        // 某些设备/浏览器不支持，跳过
                     }
                 }
             }

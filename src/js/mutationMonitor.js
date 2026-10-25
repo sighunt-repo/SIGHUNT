@@ -3,9 +3,9 @@
   const MAX_RECORDS = 500;
 
   const stats = {
-    totalMutations: 0,          // 总属性变更次数
-    uniqueNodes: 0,             // 被改过的节点数
-    mutationRecords: [],        // 原始记录
+    totalMutations: 0,          
+    uniqueNodes: 0,             
+    mutationRecords: [],        
     startTs: performance.now()
   };
 
@@ -32,7 +32,6 @@
         oldValue: mutation.oldValue
       });
 
-      // 内存保护
       if (stats.mutationRecords.length > MAX_RECORDS) {
         stats.mutationRecords.shift();
       }
@@ -48,7 +47,6 @@
     attributeFilter: ['class', 'id', 'style']
   });
 
-  // ---- 对外只暴露 getter ----
   window.getMutationStats = function () {
     return {
       totalMutations: stats.totalMutations,

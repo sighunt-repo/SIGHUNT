@@ -10,7 +10,7 @@ login_bp = Blueprint('login', __name__)
 
 @login_bp.route('/')
 def index():
-    return redirect(url_for('login.login'))  # 注意这里 login.login 是蓝图+视图名
+    return redirect(url_for('login.login'))  
 
 from flask import make_response,current_app
 
@@ -22,10 +22,9 @@ def login():
 
     user = User.query.filter_by(username=username).first()
     success = user and user.password == password
-    # ---- 返回响应 ----
     resp = make_response(jsonify({
         'success': success,
-        'message': '登录成功' if success else '用户名或密码错误'
+        'message': 'Success' if success else 'wrong username or password'
     }))
 
     if success:
@@ -50,16 +49,14 @@ def register():
     username = data.get('username', '').strip()
     password = data.get('password', '').strip()
 
-    # 查重
     if User.query.filter_by(username=username).first():
-        return jsonify({"success": False, "message": "此用户名已被注册"}), 200
+        return jsonify({"success": False, "message": "Username already exists"}), 200
 
-    # 保存
     new_user = User(username=username, password=password, fingerprint="{}")
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"success": True, "message": "注册成功"}), 200
+    return jsonify({"success": True, "message": "Registration successful"}), 200
 
 @login_bp.route('/dashboard')
 def dashboard():
@@ -71,7 +68,6 @@ def test_page():
         current_app.logger.info("[/test] Accessed from %s", request.remote_addr)
         return render_template('test.html')
     except Exception as e:
-        # 打印完整异常信息到日志
         current_app.logger.error("[/test] Error: %s", str(e), exc_info=True)
-        return f"渲染 test.html 出错: {e}", 500
+        return f"Error rendering test.html: {e}", 500
 
