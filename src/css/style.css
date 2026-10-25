@@ -1,0 +1,76 @@
+/* 全局 body */
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background-color: #0d1117;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+/* D3 背景动画 */
+#d3-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;             /* 放到最底层 */
+    /* pointer-events: none;   允许鼠标穿透，不阻塞点击/滚动 */
+}
+
+/* D3 节点和连线样式 */
+.node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+.link {
+    stroke: #999;
+    stroke-opacity: 0.6;
+}
+
+/* 登录框容器 */
+.login-container {
+    position: relative;
+    z-index: 10;   /* 确保浮在动画上面 */
+    background: rgba(255, 255, 255, 0.95);
+    width: 300px;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+/* 登录框内部组件 */
+.login-container h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.login-container input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 0.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.login-container button:hover {
+    background-color: #0056b3;
+}

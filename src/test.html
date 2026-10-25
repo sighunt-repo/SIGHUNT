@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Traveler's Adventure (Auth Layer)</title>
+</head>
+<body>
+  <div id="fallback">
+    ⏳ 正在验证，请稍候... (如果长时间无响应，请启用 JavaScript)
+  </div>
+
+  <noscript>
+    <div style="color:red; padding:20px;">
+      ⚠ 您的浏览器未启用 JavaScript，无法查看此页面内容
+    </div>
+  </noscript>
+
+  <script>
+    // ✅ 获取北京时间（UTC+8）
+    function getBeijingTimeString() {
+      const now = new Date();
+      // 获取 UTC 时间 +8 小时
+      const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+      // 格式化成年月日 时:分:秒
+      const y = beijingTime.getUTCFullYear();
+      const m = String(beijingTime.getUTCMonth() + 1).padStart(2, '0');
+      const d = String(beijingTime.getUTCDate()).padStart(2, '0');
+      const h = String(beijingTime.getUTCHours()).padStart(2, '0');
+      const min = String(beijingTime.getUTCMinutes()).padStart(2, '0');
+      const s = String(beijingTime.getUTCSeconds()).padStart(2, '0');
+      return `${y}-${m}-${d} ${h}:${min}:${s}`;
+    }
+
+    const beijingTime = getBeijingTimeString();
+
+    // ✅ 向后端确认 JS 可执行，并带上北京时间字符串
+    fetch("https://skyeker.top/authorize", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        js_executed: true,
+        beijing_time: beijingTime
+      }),
+      credentials: "include"
+    })
+    .then(res => res.text())
+    .then(html => {
+      // 覆盖掉空壳内容，显示后端返回的真实 test.html
+      document.open();
+      document.write(html);
+      document.close();
+    })
+    .catch(err => {
+      console.error("授权失败:", err);
+      document.getElementById("fallback").innerText =
+        "⚠ 无法加载真实内容，请检查网络或启用 JavaScript";
+    });
+  </script>
+</body>
+</html>
